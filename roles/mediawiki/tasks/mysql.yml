@@ -1,0 +1,33 @@
+---
+- name: Install Mysql
+  dnf:
+    name: "{{ mysql_packages }}"
+    state: present
+
+- name: Start and Enable Mysql
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+
+- name: Create MediaWiki Database
+  mysql_db:
+    name: "{{ mw_database }}"
+    state: present
+    login_unix_socket: "{{ mysql_socket }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  no_log: yes
+
+- name: Create MediaWiki User
+  mysql_user:
+    name: "{{ item.name }}"
+    state: present
+    password: "{{ item.password | default(omit) }}"
+    priv: "{{ item.priv | default(omit) }}"
+    login_unix_socket: "{{ mysql_socket }}"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  loop: "{{ mw_user }}"
+  when: mw_user is defined
+  no_log: yes

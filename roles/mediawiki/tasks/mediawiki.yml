@@ -1,0 +1,30 @@
+---
+- name: Create Mediawiki Directory
+  ansible.builtin.file:
+    path: "{{ mw_destination }}"
+    state: directory
+    mode: "0755"
+
+- name: Install Mediawiki
+  ansible.builtin.unarchive:
+    src: "{{ mw_source }}"
+    dest: "{{ mw_destination }}"
+    remote_src: yes
+    creates: "{{ mw_destination }}/mediawiki-{{ mw_version }}"
+    owner: 'apache'
+    group: 'apache'
+    mode: "0755"
+
+- name: link mediawiki to versioned directory
+  ansible.builtin.file:
+    src: "{{ mw_destination }}/mediawiki-{{ mw_version }}"
+    dest: "{{ mw_destination }}/mediawiki"
+    state: link
+    mode: "0755"
+    owner: 'apache'
+    group: 'apache'
+
+- name: Start Apache
+  service:
+    name: httpd
+    state: restarted

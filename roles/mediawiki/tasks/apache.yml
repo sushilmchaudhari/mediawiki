@@ -1,0 +1,45 @@
+---
+- name: Install Apache
+  dnf:
+    name: 'httpd'
+    state: installed
+
+- name: Configure Apache port
+  lineinfile:
+    dest: "{{ apache_config_file }}"
+    regexp: "^.?Listen "
+    line: "Listen {{ apache_port }}"
+    backup: yes
+    state: present
+
+- name: Include configuration files at run-time
+  blockinfile:
+    path: "{{ apache_config_file }}"
+    backup: yes
+    block: |
+      Include sites-enabled/*.conf
+
+- name: Create apache virtualhost directory.
+  file:
+    path: '{{ item }}'
+    mode: 0755
+    state: directory
+  with_items:
+    - /etc/httpd/sites-available
+    - /etc/httpd/sites-enabled
+
+- name: Copy the virtualhosts
+  template:
+    src: mediawiki.conf.j2
+    dest: /etc/httpd/sites-available/mediawiki.conf
+
+- name: Virtualhost link to sites-available
+  file:
+    src: /etc/httpd/sites-available/mediawiki.conf
+    dest: /etc/httpd/sites-enabled/mediawiki.conf
+    state: link
+
+- name: Ensure Apache enabled on boot.
+  service:
+    name: httpd
+    enabled: true

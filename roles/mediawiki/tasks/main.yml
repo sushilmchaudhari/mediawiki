@@ -1,0 +1,13 @@
+---
+
+- name: Install and Configure Apache
+  include_tasks: apache.yml
+
+- name: Install and Configure Mysql
+  include_tasks: mysql.yml
+
+- name: Install and Configure PHP
+  include_tasks: php.yml
+
+- name: Install and Configure MediaWiki
+  include_tasks: mediawiki.yml

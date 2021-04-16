@@ -1,0 +1,12 @@
+---
+# HTTPD handlers
+- name: Restart Apache
+  service:
+    name: httpd
+    state: restarted
+
+# MySQL handlers
+- name: Restart Mysql
+  service:
+    name: mysqld
+    state: restarted

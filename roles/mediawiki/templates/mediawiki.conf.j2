@@ -1,0 +1,5 @@
+<VirtualHost *:{{ apache_port }}>
+   ServerName {{ ansible_default_ipv4.address }}
+   DocumentRoot {{ mw_destination }}/mediawiki
+   DirectoryIndex index.html index.html.var index.php
+</VirtualHost>

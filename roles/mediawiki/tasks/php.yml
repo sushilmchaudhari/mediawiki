@@ -1,0 +1,12 @@
+---
+- name: Enable PHP module
+  command:
+      cmd: "dnf module enable -y php:{{ php_version }}"
+      creates: /etc/dnf/modules.d/php.module
+  args:
+    warn: false
+
+- name: Install PHP
+  dnf:
+    name: "{{ php_packages }}"
+    state: present

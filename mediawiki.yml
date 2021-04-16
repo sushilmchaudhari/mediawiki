@@ -1,0 +1,6 @@
+---
+- name: Setting Up MediaWiki
+  hosts: all
+  become: yes
+  roles:
+    - role: mediawiki

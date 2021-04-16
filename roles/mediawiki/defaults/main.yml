@@ -1,0 +1,35 @@
+---
+# defaults file for mediawiki
+# HTTPD
+apache_port: '80'
+apache_config_file: '/etc/httpd/conf/httpd.conf'
+
+# MySQL
+mysql_user: 'root'
+mysql_root_password: ''
+mysql_socket: '/var/lib/mysql/mysql.sock'
+mysql_packages:
+  - mariadb-server
+  - mariadb
+  - python3-PyMySQL
+
+# PHP
+php_version: '7.4'
+php_packages:
+  - php
+  - php-mysqlnd
+  - php-gd
+  - php-xml
+  - php-mbstring
+  - php-json
+
+# MediaWiki
+mw_destination: '/var/www'
+mw_database: 'mediawiki'
+mw_user:
+  - name: wiki
+    password: s3Cur3One
+    priv: "{{ mw_database }}.*:ALL"
+
+mw_version: '1.35.2'
+mw_source: "https://releases.wikimedia.org/mediawiki/{{ mw_version.split('.')[0] }}.{{ mw_version.split('.')[1] }}/mediawiki-{{ mw_version }}.tar.gz"
